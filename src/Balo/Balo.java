@@ -5,11 +5,15 @@
  */
 package Balo;
 
+import com.opencsv.CSVWriter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -23,8 +27,8 @@ public class Balo {
     int remainingWeight;
     
     //Variable for Dynamic 2
-    int F[][] = new int[30][500];
-    int X[][] = new int[30][500];
+    int F[][] = new int[100][1000];
+    int X[][] = new int[100][1000];
     
     public Balo() {
     }
@@ -34,9 +38,9 @@ public class Balo {
 	Dovat pivot = arr[(left + right) / 2];
 
 	while (i <= j) {
-	    while (arr[i].dongia < pivot.dongia)
+	    while (arr[i].dongia > pivot.dongia)
 	        i++;
-	    while (arr[j].dongia > pivot.dongia)
+	    while (arr[j].dongia < pivot.dongia)
 	        j--;
 	        if (i <= j) {
 	            tmp = arr[i];
@@ -59,11 +63,15 @@ public class Balo {
     }
 	
     private void tinhdongia(Dovat sp[],int n){
-        for(int i=0;i<n;i++)
-            sp[i].dongia=sp[i].giatri/sp[i].trongluong;
+        for(int i=0;i<n;i++){
+            sp[i].dongia=(float)sp[i].giatri/sp[i].trongluong;
+            //System.out.println("Ten: " + sp[i].ten + "Don gia: " + sp[i].dongia);
+        }
     }
     
     private void Greedy(Dovat sp[],int n,float w){
+        tinhdongia(sp,n);
+        quickSort(sp,0,n-1);
         int numOfCurrentValue;
         for(int i=0;i<n;i++){
             numOfCurrentValue = (int)(w/sp[i].trongluong);  //Chọn số lượng đồ vật có đơn giá lớn nhất
@@ -93,18 +101,21 @@ public class Balo {
     
     public long timeToRunGreedy(Dovat dv[], int sl, int w){
         long start = System.nanoTime();
-        tinhdongia(dv,sl);
-        quickSort(dv,0,sl-1);
         Greedy(dv,sl,w);
         long end = System.nanoTime();
-        return (end - start);  
+        return (end - start)/1000;  
     }
   
+    public void in(Dovat sp[],int n){
+        for(int i=0;i<n;i++)
+            System.out.println("Ten: " + sp[i].ten + "   |  Don gia: " + sp[i].dongia);
+    }
+    
     public long timeToRunDynamic(Dovat dv[], int sl, int w){
         long start = System.nanoTime();
         Dynamic(dv,sl,w);
         long end = System.nanoTime();
-        return (end - start);  
+        return (end - start)/1000;  
     }
 
     private void Dynamic(Dovat dv[], int numItems, int maxWeight) {
@@ -136,14 +147,14 @@ public class Balo {
     }
     
     //Test function
-    public void PrintArray(){
-            for(int j=0;j<9;j++){
+    public void PrintArray(int sl, int w){
+            for(int j=0;j<w;j++){
                 System.out.print("X["+(0)+"]["+(j+1)+"]    ");
             }
             System.out.println();
         
-        for(int i=1;i<=5;i++){
-            for(int j=0;j<=9;j++){
+        for(int i=1;i<=sl;i++){
+            for(int j=0;j<=w;j++){
                 System.out.print(F[i][j]+"|"+X[i][j]+ "        ");
             }
             System.out.println();
@@ -191,6 +202,25 @@ public class Balo {
 
             e.printStackTrace();
         }
+    }
+    
+        public void writeOutputResult(Dovat dv[], Dovat dv2[], int n, int numWeight) throws IOException{
+        String csv = "D:\\ResultGTNC.csv";
+        CSVWriter writer = new CSVWriter(new FileWriter(csv));
+
+        List<String[]> data = new ArrayList<String[]>();
+        for (int i=1;i<=numWeight; i++){
+            Greedy(dv, n, i);
+            Dynamic(dv2, n, i); 
+            //data.add(new String[] {resultGreedy(dv, n), resultDynamic(dv2, n, w)});
+            System.out.println(resultGreedy(dv, n));
+            System.out.println(resultDynamic(dv2, n, i));
+
+        }
+
+        writer.writeAll(data);
+
+        writer.close();
     }
 
 }

@@ -5,18 +5,25 @@
  */
 package Balo;
 
+import com.opencsv.CSVWriter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -33,17 +40,48 @@ public class MainFram extends javax.swing.JFrame {
     /**
      * Creates new form MainFram
      */
+    DefaultTableModel model;
     int weightBag;
     int numOfItem;
     Balo balo = new Balo();
-    Dovat dvGreedy[]=new Dovat[100];
-    Dovat dvDynamic[]=new Dovat[100];
+    Dovat dvGreedy[]=new Dovat[1000];
+    Dovat dvDynamic[]=new Dovat[1000];
     
+    Dovat dvGreedy2[]=new Dovat[1000];
+    Dovat dvDynamic2[]=new Dovat[1000];
+    int numOfItem2 = 30;
+    
+    private void RandomData(){
+        dvDynamic2[0] = new Dovat();
+        int min = 1;
+        int max = 100;
+        Random rn = new Random();
+        int range = max - min + 1;
+        for(int i=0;i<numOfItem2;i++){
+            dvDynamic2[i+1] = dvGreedy2[i] = new Dovat();
+            dvDynamic2[i+1].ten = dvGreedy2[i].ten = String.valueOf(min + rn.nextInt(range));           
+            dvDynamic2[i+1].soluong = dvGreedy2[i].soluong = min + rn.nextInt(range);
+            dvDynamic2[i+1].giatri = dvGreedy2[i].giatri = min + rn.nextInt(range);
+            dvDynamic2[i+1].trongluong = dvGreedy2[i].trongluong = min + rn.nextInt(range);
+        }
+    }
     public MainFram() throws IOException {
         initComponents();
-        setIcon();
-        //InitData();
+        
+        Object[] columns = {"Tên đồ vật", "Số lượng", "Giá trị", "Trọng lượng"};
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(columns);    
+        Table_Dovat.setModel(model);
         getDataFileToJTable();
+        
+        //Add group
+        GroupChart.add(RadioColumn);
+        GroupChart.add(RadioLine);
+        
+        RadioColumn.setSelected(true);
+        
+        RandomData();
+        
     }
     
     //Don't use
@@ -61,15 +99,10 @@ public class MainFram extends javax.swing.JFrame {
         }
         //Get max value of the bag
         weightBag = Integer.parseInt(TextW.getText());  
-
-        //Check null and add some conditions
-        if (weightBag == 0){
-            weightBag = 0;
-        }
     }
     
-    public void getDataFileToJTable(){
-        String fileNameDefined = "src/Balo/Data_1.csv";
+   public void getDataFileToJTable(){
+        String fileNameDefined = "src/Balo/Data_3.csv";
         File file = new File(fileNameDefined);
         int i=0;
          
@@ -96,11 +129,13 @@ public class MainFram extends javax.swing.JFrame {
         }
         
         //Set value for JTable
-        for (int item=0;item<numOfItem;item++){
-            Table_Dovat.setValueAt(dvGreedy[item].ten, item , 0);
-            Table_Dovat.setValueAt(dvGreedy[item].soluong, item, 1);
-            Table_Dovat.setValueAt(dvGreedy[item].giatri, item, 2);
-            Table_Dovat.setValueAt(dvGreedy[item].trongluong, item, 3);
+        for (int item=0;item<numOfItem;item++){ 
+            Object[] row = new Object[4];
+            row[0] = dvGreedy[item].ten;
+            row[1] = dvGreedy[item].soluong;
+            row[2] = dvGreedy[item].giatri;
+            row[3] = dvGreedy[item].trongluong;
+            model.addRow(row);
         }  
     }
     /**
@@ -112,42 +147,59 @@ public class MainFram extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Panel_Chart = new javax.swing.JPanel();
+        GroupChart = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
         Title = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         Table_Dovat = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        TextW = new javax.swing.JTextField();
+        RadioColumn = new javax.swing.JRadioButton();
+        RadioLine = new javax.swing.JRadioButton();
         Button_Result = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TextAreaGreedy = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         TextAreaDynamic = new javax.swing.JTextArea();
-        jLabel5 = new javax.swing.JLabel();
-        TextW = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        Panel_Chart = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(235, 242, 253));
+        setBackground(new java.awt.Color(215, 228, 247));
+        setForeground(java.awt.Color.white);
 
-        Panel_Chart.setBackground(new java.awt.Color(218, 243, 252));
-
-        javax.swing.GroupLayout Panel_ChartLayout = new javax.swing.GroupLayout(Panel_Chart);
-        Panel_Chart.setLayout(Panel_ChartLayout);
-        Panel_ChartLayout.setHorizontalGroup(
-            Panel_ChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        Panel_ChartLayout.setVerticalGroup(
-            Panel_ChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
         Title.setBackground(new java.awt.Color(204, 204, 255));
-        Title.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        Title.setForeground(new java.awt.Color(255, 0, 51));
-        Title.setText("Greedy and Dynamic");
+        Title.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
+        Title.setForeground(new java.awt.Color(204, 0, 0));
+        Title.setText("BÀI TOÁN CÁI BA LÔ (SỐ LƯỢNG ĐỒ VẬT GIỚI HẠN) BẰNG GIẢI THUẬT THAM ĂN VÀ QUY HOACH ĐỘNG");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(167, 167, 167)
+                .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, 1190, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jPanel3.setAlignmentX(0.0F);
+        jPanel3.setAlignmentY(0.0F);
 
         Table_Dovat.setBackground(new java.awt.Color(242, 241, 241));
         Table_Dovat.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -183,6 +235,16 @@ public class MainFram extends javax.swing.JFrame {
             Table_Dovat.getColumnModel().getColumn(3).setResizable(false);
         }
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setText("Trọng lượng: ");
+
+        TextW.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        TextW.setText("300");
+
+        RadioColumn.setText("BIỂU ĐỒ CỘT");
+
+        RadioLine.setText("BIỂU ĐỒ ĐƯỜNG");
+
         Button_Result.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Button_Result.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/icon_play.png"))); // NOI18N
         Button_Result.setText("Thực thi");
@@ -192,100 +254,150 @@ public class MainFram extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/checkdb.png"))); // NOI18N
-        jLabel1.setText("    Dữ liệu thực nghiệm");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("KẾT QUẢ GIẢI THUẬT THAM ẮN");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/charts-icon.png"))); // NOI18N
-        jLabel2.setText("     Biểu đồ");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("Greedy");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Dynamic");
-
+        TextAreaGreedy.setEditable(false);
         TextAreaGreedy.setColumns(20);
         TextAreaGreedy.setRows(5);
         TextAreaGreedy.setText("Đồ vật - Số lượng chọn\n======================");
         jScrollPane2.setViewportView(TextAreaGreedy);
 
+        TextAreaDynamic.setEditable(false);
         TextAreaDynamic.setColumns(20);
         TextAreaDynamic.setRows(5);
         TextAreaDynamic.setText("Đồ vật - Số lượng chọn\n======================");
         jScrollPane3.setViewportView(TextAreaDynamic);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel5.setText("Trọng lượng: ");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("KẾT QUẢ GIẢI THUẬT QUY HOẠCH ĐỘNG");
 
-        TextW.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        TextW.setText("20");
+        Panel_Chart.setBackground(new java.awt.Color(218, 243, 252));
+
+        javax.swing.GroupLayout Panel_ChartLayout = new javax.swing.GroupLayout(Panel_Chart);
+        Panel_Chart.setLayout(Panel_ChartLayout);
+        Panel_ChartLayout.setHorizontalGroup(
+            Panel_ChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        Panel_ChartLayout.setVerticalGroup(
+            Panel_ChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel5)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(TextW, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(RadioColumn)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(RadioLine)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button_Result, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Panel_Chart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Panel_Chart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Button_Result, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TextW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(RadioColumn)
+                            .addComponent(RadioLine))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/checkdb.png"))); // NOI18N
+        jLabel1.setText("    Dữ liệu thực nghiệm");
+
+        jButtonAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/add1.png"))); // NOI18N
+        jButtonAdd.setText("Thêm");
+        jButtonAdd.setPreferredSize(new java.awt.Dimension(95, 45));
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/delete.png"))); // NOI18N
+        jButtonDelete.setText("Xóa");
+        jButtonDelete.setPreferredSize(new java.awt.Dimension(87, 45));
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/charts-icon.png"))); // NOI18N
+        jLabel2.setText("     Biểu đồ về thời gian của hai giải thuật ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(TextW, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                                    .addComponent(Button_Result, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Panel_Chart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE))))
-                .addContainerGap())
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(128, 128, 128)
+                .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
-                        .addComponent(Button_Result, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE))
-                    .addComponent(Panel_Chart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                        .addComponent(jLabel1)
+                        .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -293,46 +405,116 @@ public class MainFram extends javax.swing.JFrame {
 
     private void Button_ResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_ResultActionPerformed
         // TODO add your handling code here:
-        
+
         //==========================================================
-        //InitData();
-        getDataFileToJTable();
-        long timeG1 = balo.timeToRunGreedy(dvGreedy, numOfItem, weightBag);
-        String resultGreedy = balo.resultGreedy(dvGreedy, numOfItem);
-        TextAreaGreedy.setText(resultGreedy);
-        
-        long timeD1 = balo.timeToRunDynamic(dvDynamic, numOfItem, weightBag);
-        String resultDynamic = balo.resultDynamic(dvDynamic, numOfItem, weightBag);
-        TextAreaDynamic.setText(resultDynamic);
-        
-        balo.PrintArray();
-        try {
-            balo.getDataFromFile();
+        if(RadioLine.isSelected()){
+            long timeG = 0;
+            long timeD = 0;
             
-            //String resultDynamic = balo.resultDynamic(dvDynamic, numOfItem, weightBag);
-            //TextAreaDynamic.setText(resultDynamic);
-        } catch (IOException ex) {
-            Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            String csv = "D:\\ResultGTNC.csv";
+            CSVWriter writer = null;
+            try {
+                writer = new CSVWriter(new FileWriter(csv));
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            List<String[]> data = new ArrayList<String[]>();
+            data.add(new String[] {"Weight", "Greedy", "Dynamic"});
+
+            weightBag = Integer.parseInt(TextW.getText()); 
+            DefaultCategoryDataset barChart = new DefaultCategoryDataset();
+            //Get all data
+            for(int i=10;i<=700; i=i+40){
+                InitData();
+                
+                timeG = balo.timeToRunGreedy(dvGreedy, numOfItem, i);
+                timeD = balo.timeToRunDynamic(dvDynamic, numOfItem, i);
+                barChart.setValue(timeG,"Tham ăn          ", String.valueOf(i));
+                barChart.setValue(timeD,"Quy hoạch động   ", String.valueOf(i));
+                data.add(new String[] {String.valueOf(i), String.valueOf(timeG), String.valueOf(timeD)});
+            }
+            
+            writer.writeAll(data);
+
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            //==========================================================
+            JFreeChart jbarChart = ChartFactory.createLineChart("Biểu đồ thời gian thực hiện", "Trọng lượng của ba lô", "micro giây", barChart, PlotOrientation.VERTICAL, true, true, true);
+            CategoryPlot barchrt = (CategoryPlot)jbarChart.getPlot();
+
+            ChartPanel barPanel = new ChartPanel(jbarChart);
+            Panel_Chart.removeAll();
+            Panel_Chart.setLayout(new BorderLayout());
+            Panel_Chart.add(barPanel, BorderLayout.CENTER);
+            Panel_Chart.validate();
         }
+        else {
+            InitData();
+            weightBag = Integer.parseInt(TextW.getText()); 
+            long timeG = balo.timeToRunGreedy(dvGreedy, numOfItem, weightBag);
+            String resultGreedy = balo.resultGreedy(dvGreedy, numOfItem);
+            TextAreaGreedy.setText(resultGreedy);
 
-        //==========================================================
-        DefaultCategoryDataset barChart = new DefaultCategoryDataset();
-        barChart.setValue(timeG1,"Greedy","Data 1");
-        barChart.setValue(timeD1,"Dynamic","Data 1");
+            long timeD = balo.timeToRunDynamic(dvDynamic, numOfItem, weightBag);
+            String resultDynamic = balo.resultDynamic(dvDynamic, numOfItem, weightBag);
+            TextAreaDynamic.setText(resultDynamic);
 
-        barChart.setValue(timeG1,"Greedy","Data 2");
-        barChart.setValue(timeD1,"Dynamic","Data 2");
-        
-        JFreeChart jbarChart = ChartFactory.createBarChart("The time chart of Greedy and Dynamic", "Monthly", "Time to run", barChart, PlotOrientation.VERTICAL, true, true, true);
-        CategoryPlot barchrt = (CategoryPlot)jbarChart.getPlot();
-        barchrt.setRangeGridlinePaint(Color.BLUE);
-        
-        ChartPanel barPanel = new ChartPanel(jbarChart);
-        Panel_Chart.removeAll();
-        Panel_Chart.setLayout(new BorderLayout());
-        Panel_Chart.add(barPanel, BorderLayout.CENTER);
-        Panel_Chart.validate();
+            //Random data
+            long timeG2 = balo.timeToRunGreedy(dvGreedy2, numOfItem2, weightBag);
+
+            long timeD2 = balo.timeToRunDynamic(dvDynamic2, numOfItem2, weightBag);
+            
+            //==========================================================
+            DefaultCategoryDataset barChart = new DefaultCategoryDataset();
+            barChart.setValue(timeG,"Tham ăn          ", "Dữ liệu thực nghiệm");
+            barChart.setValue(timeD,"Quy hoạch động   ", "Dữ liệu thực nghiệm");
+            
+            barChart.setValue(timeG2,"Tham ăn          ", "Dữ liệu ngẫu nhiên" );
+            barChart.setValue(timeD2,"Quy hoạch động   ", "Dữ liệu ngẫu nhiên");
+
+            JFreeChart jbarChart = ChartFactory.createBarChart("Biểu đồ thời gian thực hiện", "Trọng lượng tối đa của ba lô", "micro giây", barChart, PlotOrientation.VERTICAL, true, true, true);
+            CategoryPlot barchrt = (CategoryPlot)jbarChart.getPlot();
+
+            ChartPanel barPanel = new ChartPanel(jbarChart);
+            Panel_Chart.removeAll();
+            Panel_Chart.setLayout(new BorderLayout());
+            Panel_Chart.add(barPanel, BorderLayout.CENTER);
+            Panel_Chart.validate();
+        } 
     }//GEN-LAST:event_Button_ResultActionPerformed
+
+    private void jButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddMouseClicked
+        // TODO add your handling code here:
+        numOfItem = Table_Dovat.getRowCount();
+        Object[] row = new Object[4];
+        row[0] = "";
+        row[1] = "";
+        row[2] = "";
+        row[3] = "";
+        model.addRow(row);
+    }//GEN-LAST:event_jButtonAddMouseClicked
+
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        // TODO add your handling code here:
+        int i = Table_Dovat.getSelectedRow();
+        if (i >=0 ) model.removeRow(i);
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        // TODO add your handling code here:
+        numOfItem = Table_Dovat.getRowCount();
+        Object[] row = new Object[4];
+        row[0] = "";
+        row[1] = "";
+        row[2] = "";
+        row[3] = "";
+        model.addRow(row);
+    }//GEN-LAST:event_jButtonAddActionPerformed
 
     /**
      * @param args the command line arguments
@@ -375,17 +557,24 @@ public class MainFram extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Button_Result;
+    private javax.swing.ButtonGroup GroupChart;
     private javax.swing.JPanel Panel_Chart;
+    private javax.swing.JRadioButton RadioColumn;
+    private javax.swing.JRadioButton RadioLine;
     private javax.swing.JTable Table_Dovat;
     private javax.swing.JTextArea TextAreaDynamic;
     private javax.swing.JTextArea TextAreaGreedy;
     private javax.swing.JTextField TextW;
     private javax.swing.JLabel Title;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonDelete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
