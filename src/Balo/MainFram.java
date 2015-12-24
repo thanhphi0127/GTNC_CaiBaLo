@@ -51,7 +51,7 @@ public class MainFram extends javax.swing.JFrame {
     Dovat dvDynamic2[]=new Dovat[1000];
     int numOfItem2 = 30;
     
-    private void RandomData(){
+    private void RandomData(int numOfItem2){
         dvDynamic2[0] = new Dovat();
         int min = 1;
         int max = 100;
@@ -77,10 +77,11 @@ public class MainFram extends javax.swing.JFrame {
         //Add group
         GroupChart.add(RadioColumn);
         GroupChart.add(RadioLine);
+        GroupChart.add(RadioItemChage);
         
         RadioColumn.setSelected(true);
         
-        RandomData();
+        RandomData(numOfItem2);
         
     }
     
@@ -165,6 +166,7 @@ public class MainFram extends javax.swing.JFrame {
         TextAreaDynamic = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         Panel_Chart = new javax.swing.JPanel();
+        RadioItemChage = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jButtonAdd = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
@@ -239,11 +241,11 @@ public class MainFram extends javax.swing.JFrame {
         jLabel5.setText("Trọng lượng: ");
 
         TextW.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        TextW.setText("300");
+        TextW.setText("150");
 
-        RadioColumn.setText("BIỂU ĐỒ CỘT");
+        RadioColumn.setText("Mặc định");
 
-        RadioLine.setText("BIỂU ĐỒ ĐƯỜNG");
+        RadioLine.setText("W ba lô thay đổi");
 
         Button_Result.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Button_Result.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/icon_play.png"))); // NOI18N
@@ -285,6 +287,8 @@ public class MainFram extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        RadioItemChage.setText("Số ĐVật thay đổi");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -309,6 +313,8 @@ public class MainFram extends javax.swing.JFrame {
                             .addComponent(RadioColumn)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(RadioLine)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(RadioItemChage)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Button_Result, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -330,7 +336,8 @@ public class MainFram extends javax.swing.JFrame {
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(TextW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(RadioColumn)
-                            .addComponent(RadioLine))
+                            .addComponent(RadioLine)
+                            .addComponent(RadioItemChage))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -365,7 +372,7 @@ public class MainFram extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Balo/charts-icon.png"))); // NOI18N
-        jLabel2.setText("     Biểu đồ về thời gian của hai giải thuật ");
+        jLabel2.setText("     Biểu đồ về thời gian thực hiện của hai giải thuật ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -381,7 +388,7 @@ public class MainFram extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 562, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -405,12 +412,10 @@ public class MainFram extends javax.swing.JFrame {
 
     private void Button_ResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_ResultActionPerformed
         // TODO add your handling code here:
-
         //==========================================================
         if(RadioLine.isSelected()){
             long timeG = 0;
             long timeD = 0;
-            
             String csv = "D:\\ResultGTNC.csv";
             CSVWriter writer = null;
             try {
@@ -418,16 +423,13 @@ public class MainFram extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             List<String[]> data = new ArrayList<String[]>();
             data.add(new String[] {"Weight", "Greedy", "Dynamic"});
-
             weightBag = Integer.parseInt(TextW.getText()); 
             DefaultCategoryDataset barChart = new DefaultCategoryDataset();
             //Get all data
             for(int i=10;i<=700; i=i+40){
                 InitData();
-                
                 timeG = balo.timeToRunGreedy(dvGreedy, numOfItem, i);
                 timeD = balo.timeToRunDynamic(dvDynamic, numOfItem, i);
                 barChart.setValue(timeG,"Tham ăn          ", String.valueOf(i));
@@ -436,38 +438,51 @@ public class MainFram extends javax.swing.JFrame {
             }
             
             writer.writeAll(data);
-
             try {
                 writer.close();
             } catch (IOException ex) {
                 Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
             //==========================================================
             JFreeChart jbarChart = ChartFactory.createLineChart("Biểu đồ thời gian thực hiện", "Trọng lượng của ba lô", "micro giây", barChart, PlotOrientation.VERTICAL, true, true, true);
             CategoryPlot barchrt = (CategoryPlot)jbarChart.getPlot();
-
             ChartPanel barPanel = new ChartPanel(jbarChart);
             Panel_Chart.removeAll();
             Panel_Chart.setLayout(new BorderLayout());
             Panel_Chart.add(barPanel, BorderLayout.CENTER);
             Panel_Chart.validate();
         }
-        else {
+        else if(RadioColumn.isSelected()){
+            String csv = "D:\\ResultColumn.csv";
+            CSVWriter writer = null;
+            try {
+                writer = new CSVWriter(new FileWriter(csv));
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            List<String[]> data = new ArrayList<String[]>();
+            data.add(new String[] {"Result", "Greedy", "Dynamic"});
             InitData();
             weightBag = Integer.parseInt(TextW.getText()); 
             long timeG = balo.timeToRunGreedy(dvGreedy, numOfItem, weightBag);
             String resultGreedy = balo.resultGreedy(dvGreedy, numOfItem);
             TextAreaGreedy.setText(resultGreedy);
-
             long timeD = balo.timeToRunDynamic(dvDynamic, numOfItem, weightBag);
             String resultDynamic = balo.resultDynamic(dvDynamic, numOfItem, weightBag);
             TextAreaDynamic.setText(resultDynamic);
 
             //Random data
             long timeG2 = balo.timeToRunGreedy(dvGreedy2, numOfItem2, weightBag);
-
             long timeD2 = balo.timeToRunDynamic(dvDynamic2, numOfItem2, weightBag);
+            
+            data.add(new String[] {"File", String.valueOf(timeG), String.valueOf(timeD)});
+            data.add(new String[] {"Random", String.valueOf(timeG2), String.valueOf(timeD2)});
+            writer.writeAll(data);
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             //==========================================================
             DefaultCategoryDataset barChart = new DefaultCategoryDataset();
@@ -485,7 +500,46 @@ public class MainFram extends javax.swing.JFrame {
             Panel_Chart.setLayout(new BorderLayout());
             Panel_Chart.add(barPanel, BorderLayout.CENTER);
             Panel_Chart.validate();
-        } 
+        }
+        else{ // Trọng lượng không đổi, số lượng đồ vật thay đổi.
+            long timeG = 0;
+            long timeD = 0;
+            String csv = "D:\\ResultItemChage.csv";
+            CSVWriter writer = null;
+            try {
+                writer = new CSVWriter(new FileWriter(csv));
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            List<String[]> data = new ArrayList<String[]>();
+            data.add(new String[] {"Num of Item", "Greedy", "Dynamic"});
+            weightBag = Integer.parseInt(TextW.getText()); 
+            DefaultCategoryDataset barChart = new DefaultCategoryDataset();
+            //Get all data
+            for(int i=1;i<=77; i=i+4){
+                RandomData(i);
+                timeG = balo.timeToRunGreedy(dvGreedy2, i, weightBag);
+                timeD = balo.timeToRunDynamic(dvDynamic2, i, weightBag);
+                barChart.setValue(timeG,"Tham ăn          ", String.valueOf(i));
+                barChart.setValue(timeD,"Quy hoạch động   ", String.valueOf(i));
+                data.add(new String[] {String.valueOf(i), String.valueOf(timeG), String.valueOf(timeD)});
+            }
+            
+            writer.writeAll(data);
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainFram.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //==========================================================
+            JFreeChart jbarChart = ChartFactory.createLineChart("Biểu đồ thời gian thực hiện khi số lượng đồ vật thay đổi", "Số lượng đồ vật", "micro giây", barChart, PlotOrientation.VERTICAL, true, true, true);
+            CategoryPlot barchrt = (CategoryPlot)jbarChart.getPlot();
+            ChartPanel barPanel = new ChartPanel(jbarChart);
+            Panel_Chart.removeAll();
+            Panel_Chart.setLayout(new BorderLayout());
+            Panel_Chart.add(barPanel, BorderLayout.CENTER);
+            Panel_Chart.validate();  
+        }
     }//GEN-LAST:event_Button_ResultActionPerformed
 
     private void jButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddMouseClicked
@@ -560,6 +614,7 @@ public class MainFram extends javax.swing.JFrame {
     private javax.swing.ButtonGroup GroupChart;
     private javax.swing.JPanel Panel_Chart;
     private javax.swing.JRadioButton RadioColumn;
+    private javax.swing.JRadioButton RadioItemChage;
     private javax.swing.JRadioButton RadioLine;
     private javax.swing.JTable Table_Dovat;
     private javax.swing.JTextArea TextAreaDynamic;

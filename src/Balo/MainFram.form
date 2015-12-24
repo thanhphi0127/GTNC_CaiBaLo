@@ -43,7 +43,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButtonDelete" min="-2" pref="103" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" pref="392" max="-2" attributes="0"/>
+              <Component id="jLabel2" min="-2" pref="562" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -145,6 +145,8 @@
                               <Component id="RadioColumn" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="RadioLine" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="RadioItemChage" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="Button_Result" min="-2" pref="149" max="-2" attributes="0"/>
                           </Group>
@@ -172,6 +174,7 @@
                               <Component id="TextW" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="RadioColumn" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="RadioLine" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="RadioItemChage" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -295,17 +298,17 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="300"/>
+            <Property name="text" type="java.lang.String" value="150"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="RadioColumn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="BI&#x1ec2;U &#x110;&#x1ed2; C&#x1ed8;T"/>
+            <Property name="text" type="java.lang.String" value="M&#x1eb7;c &#x111;&#x1ecb;nh"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JRadioButton" name="RadioLine">
           <Properties>
-            <Property name="text" type="java.lang.String" value="BI&#x1ec2;U &#x110;&#x1ed2; &#x110;&#x1af;&#x1edc;NG"/>
+            <Property name="text" type="java.lang.String" value="W ba l&#xf4; thay &#x111;&#x1ed5;i"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="Button_Result">
@@ -392,6 +395,11 @@
             </DimensionLayout>
           </Layout>
         </Container>
+        <Component class="javax.swing.JRadioButton" name="RadioItemChage">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="S&#x1ed1; &#x110;V&#x1ead;t thay &#x111;&#x1ed5;i"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -441,7 +449,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/Balo/charts-icon.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="     Bi&#x1ec3;u &#x111;&#x1ed3; v&#x1ec1; th&#x1edd;i gian c&#x1ee7;a hai gi&#x1ea3;i thu&#x1ead;t "/>
+        <Property name="text" type="java.lang.String" value="     Bi&#x1ec3;u &#x111;&#x1ed3; v&#x1ec1; th&#x1edd;i gian th&#x1ef1;c hi&#x1ec7;n c&#x1ee7;a hai gi&#x1ea3;i thu&#x1ead;t "/>
       </Properties>
     </Component>
   </SubComponents>
